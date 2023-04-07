@@ -1,0 +1,24 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+<div class="container">
+<h1 class="my-4">Message history</h1>
+ {% if user.messages %}
+<div class="list-group">
+  {% for message in user.messages %}
+  <div class="list-group-item">
+    <h5 class="mb-1"><strong>Message role:</strong> {{ message.role }}</h5>
+    <p class="mb-1"><strong>Content:</strong> {{ message.content }}</p>
+    <small>
+      <strong>Timestamp:</strong> {{ message.ts.strftime('%Y-%m-%d %H:%M:%S') }}
+    </small>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info" role="alert">
+  No messages found.
+</div>
+{% endif %}
+</div>
+</div>
+{% endblock %}

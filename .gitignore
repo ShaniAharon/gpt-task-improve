@@ -1,0 +1,41 @@
+
+# General Python files to ignore
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyc
+*.egg-info/
+dist/
+*.egg
+*.log
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# IDE and editor files
+*.swp
+*.swo
+*.swn
+*.idea/
+.vscode/
+
+# Database files
+*.db
+*.sqlite
+
+# Flask-specific files
+instance/
+migrations/
+
+# Miscellaneous
+.DS_Store
+*.bak
+*.tmp
+*.orig
+
+
+.env
+
