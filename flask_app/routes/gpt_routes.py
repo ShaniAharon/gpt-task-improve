@@ -53,3 +53,11 @@ def add_message(user, role, content):
     message = Message(user_id=user.id, role=role, content=content)
     db.session.add(message)
     db.session.commit()
+
+# route for getting all the messages array as json
+@gpt_routes.route('/api/msg' , methods=['GET'])
+def get_messages():
+    msgs = Message.query.all()
+    msgs_data = [{'id': msg.id, 'role': msg.role, 'content': msg.content, 'ts': msg.ts} for msg in msgs]
+    print(msgs_data)
+    return jsonify(msgs_data)
