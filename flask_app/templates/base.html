@@ -14,6 +14,7 @@
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css')}}" />
     <!-- can override the stuff in this block  from the child that inharite it -->
     <title>{% block title %}Home{% endblock %}</title>
   </head>
@@ -46,23 +47,25 @@
 
     <!-- show the messages if we have from the flash, 
          run on the array and show each one  -->
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %} {% for category, message in messages %}
-    <div
-      class="alert alert-{{ category }} alert-dismissible fade show flash-message"
-      role="alert"
-    >
-      {{ message }}
-      <button
-        type="button"
-        class="close"
-        data-dismiss="alert"
-        aria-label="Close"
+    <div class="flash-message-container">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert alert-{{ category }} alert-dismissible fade show flash-message"
+        role="alert"
       >
-        <span aria-hidden="true">&times;</span>
-      </button>
+        {{ message }}
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
     </div>
-    {% endfor %} {% endif %} {% endwith %}
 
     <div class="container">{% block content %} {% endblock %}</div>
     <script
