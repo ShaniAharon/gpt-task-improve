@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request,redirect,url_for
+from flask import Blueprint, render_template, request,redirect,url_for, flash
 from ..models.user import User
 from .. import db
 from flask_login import login_user, login_required, logout_user
@@ -16,13 +16,13 @@ def login():
           user = User.query.filter_by(email=email).first()
           if user:
               if check_password_hash(user.password, password):
-                  print('Logged in successfully!')
+                  flash('Logged in successfully!', category='success')
                   login_user(user, remember=True)
                   return redirect(url_for('home_routes.home'))
               else:
-                  print('Incorrect password, try again.')
+                  flash('Incorrect password, try again.', category='danger')
           else:
-              print('Email does not exist.')
+              flash('Email does not exist.', category='danger')
         
      return render_template("login.html") 
 
@@ -37,15 +37,16 @@ def sign_up():
         #   print(f"Email: {email}, First Name: {first_name}, Password: {password}, Confirm Password: {confirm_password}")
           user = User.query.filter_by(email=email).first()
           if user:
-            print('Email already exists')
+            flash('Email already exists.', category='danger')
           elif password != confirm_password:
-            print('Passwords don\'t match.')
+            flash('Passwords don\'t match.', category='danger')
           else:
             hash_pass = generate_password_hash(password, method='sha256')
             new_user = User(email=email, first_name=first_name, password=hash_pass)
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)#remember user after there session is expires
+            flash('Account created!', category='success')
             return redirect(url_for('home_routes.home'))
 
             
