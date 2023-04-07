@@ -1,7 +1,6 @@
 from flask import Flask
 from config import Config
 from .database import db
-import os
 from os import path
 from .routes.gpt_routes import gpt_routes
 from .routes.home_routes import home_routes
@@ -34,7 +33,7 @@ def create_app():
     return app
 
 def create_database(app):
-    DB_NAME = os.environ.get('DB_NAME')
+    DB_NAME = "database.db"
     #create the database structure if we dont have one
     if not path.exists('flask_app/' + DB_NAME):
         with app.app_context():
