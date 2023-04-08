@@ -5,7 +5,7 @@ import json
 
 load_dotenv()#load the env vars
 
-def get_gpt_response(message, message_history):
+def get_gpt_response(message, message_history=[]):
     api_key = os.getenv("OPENAI_API_KEY")
     if api_key is None:
         raise Exception("OPENAI_API_KEY environment variable not found")
@@ -25,17 +25,21 @@ def get_gpt_response(message, message_history):
         "stop": ["\nAssistant:"], 
         "temperature": 0.7
         }
-    
-    response = requests.post(url, headers=headers, data=json.dumps(data))
-    print(f"Response status code: {response.status_code}")
+    try:
+        response = requests.post(url, headers=headers, data=json.dumps(data))
+        print(f"Response status code: {response.status_code}")
 
-    if response.status_code == 200:
-        response_data = response.json()
-        print(f"Response content: {response_data}")
-        return response.json()["choices"][0]["text"].strip()
-    else:
-        raise Exception(f"Error: {response.status_code} - {response.text}")
+        if response.status_code == 200:
+            response_data = response.json()
+            print(f"Response content: {response_data}")
+            return response.json()["choices"][0]["text"].strip()
+        else:
+            raise Exception(f"Error: {response.status_code} - {response.text}")
+    except Exception as e:
+        print(f"Error in get_gpt_response: {str(e)}")
+        raise e
     
+
 #     # Test the function
 # try:
 #     result = get_gpt_response("What is the capital of France?")

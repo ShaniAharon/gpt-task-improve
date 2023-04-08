@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template, redirect, url_for
+from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
 from flask_login import login_required, current_user
 from ..services.gpt_service import get_gpt_response
 from ..models.user import User
@@ -10,14 +10,17 @@ gpt_routes = Blueprint('gpt_routes', __name__)
 
 @gpt_routes.route('/chat', methods=['POST'])
 def send_message():
-    data = request.get_json()
-    message = data.get('message', 'No message found in JSON object')
-    gpt_res = get_gpt_response(message)
-    response = {
-        'status': 'success',
-        'received_message_from_gpt': gpt_res
-    }
-    return jsonify(response)
+    try:
+        data = request.get_json()
+        message = data.get('message', 'No message found in JSON object')
+        gpt_res = get_gpt_response(message)
+        response = {
+            'status': 'success',
+            'received_message_from_gpt': gpt_res
+        }
+        return jsonify(response), 200
+    except Exception as e:
+        return jsonify({'status': 'error', message:str(e)}), 500
 
 @gpt_routes.route('/messages', methods=['GET'])
 @login_required
@@ -38,7 +41,11 @@ def submit_message():
      # Get message history from the database
     message_history = Message.query.filter_by(user_id=user_id).order_by(Message.ts.asc()).all()
     print(message_history,'submit')
-    answer = get_gpt_response(content, message_history)
+    try:
+        answer = get_gpt_response(content, message_history)
+    except Exception as e:
+        flash('Error on gpt response, Please try agian', category='danger')
+        return jsonify({'status': 'error', 'message':str(e)}), 500
     user = User.query.get(user_id)
 
     if user:
