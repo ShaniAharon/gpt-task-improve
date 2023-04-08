@@ -53,8 +53,7 @@ def submit_message():
         add_message(user, "assistant", answer)  # Save the assistant message
         return redirect(url_for('gpt_routes.messages'))
 
-
-    return 'Error: User not found', 404
+    return jsonify({'status': 'error', 'message': 'User not found'}), 404
 
 def add_message(user, role, content):
     message = Message(user_id=user.id, role=role, content=content)
