@@ -14,3 +14,9 @@ class Message(db.Model):
 #  This will allow you to access the related Message instances from a User instance
 #  with the messages attribute,
 #  and the related User instance from a Message instance with the user attribute.
+
+
+def add_message(user, role, content):
+    message = Message(user_id=user.id, role=role, content=content)
+    db.session.add(message)
+    db.session.commit()

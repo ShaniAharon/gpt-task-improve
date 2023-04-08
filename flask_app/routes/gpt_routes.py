@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, render_template, redirect, url_fo
 from flask_login import login_required, current_user
 from ..services.gpt_service import get_gpt_response
 from ..models.user import User
-from ..models.message import Message
+from ..models.message import Message, add_message
 from flask_app.database import db
 
 
@@ -55,10 +55,7 @@ def submit_message():
 
     return jsonify({'status': 'error', 'message': 'User not found'}), 404
 
-def add_message(user, role, content):
-    message = Message(user_id=user.id, role=role, content=content)
-    db.session.add(message)
-    db.session.commit()
+
 
 # route for getting all the messages array as json
 @gpt_routes.route('/api/msg' , methods=['GET'])
